@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@DisplayName("Удаление")
+@DisplayName("Изменение")
 public class UpdateTest extends BaseTest {
     private final Logger logger = LoggerFactory.getLogger(CreateTest.class);
     private String testDisplayName;
