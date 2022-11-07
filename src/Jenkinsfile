@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    triggers {
+        cron('H(0-45) 0,5,12 * * *')
+    }
+
+    tools {
+        jdk 'adopt_jdk_11'
+        maven 'maven'
+    }
+
+    parameters {
+        string(
+            name: 'D_TEST_OPTIONS',
+            description: '-Dtest options',
+            defaultValue: '-Dtest="api.test.**.*Test"'
+        )
+    }
+
+    stages {
+        stage("Clone") {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/master"]],
+                    extensions: [[
+                        $class: 'CloneOption',
+                        shallow: true,
+                        depth: 1,
+                        timeout: 30,
+                    ]],
+                    userRemoteConfigs: [[
+                    url: 'https://github.com/mirat1618/reqres-rest-assured.git'
+                    ]]
+
+                ])
+            }
+        }
+
+        stage("Test") {
+            steps {
+                sh "mvn clean test ${params.D_TEST_OPTIONS}"
+            }
+        }
+
+        stage("Report") {
+            steps {
+                allure([
+                    commandline: "2.8.0",
+                    includeProperties: false,
+                    jdk: "",
+                    properties: [],
+                    reportBuildPolicy: "ALWAYS",
+                    results: [[path: "target/allure-results"]]
+                ])
+            }
+        }
+    }
+}
