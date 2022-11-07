@@ -1,19 +1,11 @@
 package api.test.creating;
 
 import api.test.BaseTest;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import helper.DataManager;
 import helper.RequestSender;
 import helper.enums.RequestType;
 import helper.factory.UserFactory;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import io.restassured.specification.Argument;
 import model.User;
-import org.apache.struts.chain.commands.servlet.CreateAction;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInfo;
@@ -34,30 +26,32 @@ public class CreateTest extends BaseTest  {
 
     @BeforeEach
     public void init(TestInfo testInfo) {
-        testDisplayName = testInfo.getDisplayName();
+        testDisplayName = testInfo.getDisplayName(); // Получаем значением @DisplayName
         logger.info(testDisplayName);
     }
 
     @DisplayName("Создание пользователей")
-    @ParameterizedTest(name = "{1}")
-    @MethodSource("usersDataProvider")
+    @ParameterizedTest(name = "{1}") // второй аргумент метода
+    @MethodSource("usersDataProvider") // метод, предоставляющий тестовые данные
     public void createNikitaTest(User user, String name) {
-        String json = gson.toJson(user);
+        String json = gson.toJson(user); // Сериализируем полученных пользователей
 
-        Response response = RequestSender.doRequest(RequestType.POST, usersEndpoint, json);
+        Response response = RequestSender.doRequest(RequestType.POST, usersEndpoint, json); // Отправляем POST-запрос с сериализированным пользователем
 
         logger.info(response.getBody().asPrettyString());
 
-        assertThat(response.statusCode()).isEqualTo(201);
+        assertThat(response.statusCode()).isEqualTo(201); // Проверяем статус ответа
         assertThat(response.jsonPath().getString("id"))
                 .withFailMessage("id отсутствует")
-                .isNotNull();
+                .isNotNull(); // Проверяем, что поле id было присвоено
     }
 
-    private static Stream<Arguments> usersDataProvider() {
+    private static Stream<Arguments> usersDataProvider() { // метод для предоставления данных
+        // Создаем объекты по данным из YAML-файлов
         User nikita = UserFactory.getUser("nikita");
         User finat = UserFactory.getUser("finat");
 
+        // Возвращаем созданные объекты
         return Stream.of(Arguments.of(nikita, "Никитос"),
                         Arguments.of(finat, "Финат")
         );

@@ -30,9 +30,9 @@ public class DeleteTest extends BaseTest {
 
     @Test
     public void deleteTest() {
-        Integer userIdToBeDeleted = 2;
+        Integer userIdToBeDeleted = 2; // id пользователя для удаления
 
-        Response response = RequestSender.doRequest(RequestType.DELETE, usersEndpoint + "/" + userIdToBeDeleted);
+        Response response = RequestSender.doRequest(RequestType.DELETE, usersEndpoint + "/" + userIdToBeDeleted); // Отправляем DELETE-запрос с указанием id в эндпоинте
         assertThat(response.statusCode()).isEqualTo(204);
     }
 }

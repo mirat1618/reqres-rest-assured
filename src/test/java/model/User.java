@@ -3,6 +3,7 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/* Основная модель -- для создания инстансов */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private String id;
@@ -11,7 +12,7 @@ public class User {
 
     public User() { }
 
-    public User(User anotherUser) {
+    public User(User anotherUser) { // Конструктор копирования -- для создания новых инстансов-копий по данным из users.yaml
         this.name = anotherUser.getName();
         this.job = anotherUser.getJob();
     }
@@ -51,7 +52,7 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) { // Для сравнения отправленных и полученных обратно объектов пользователей
         if (this == o) return true;
         if (o == null) return false;
         if (!(o instanceof User)) return false;
@@ -65,7 +66,7 @@ public class User {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode() { // Для сравнения отправленных и полученных обратно объектов пользователей
         int result = this.getId().hashCode();
         result = 31 * result + this.getName().hashCode();
         result = 31 * result + this.getJob().hashCode();

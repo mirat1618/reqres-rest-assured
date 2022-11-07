@@ -28,15 +28,15 @@ public class UpdateTest extends BaseTest {
 
     @Test
     public void updateTest() {
-        User morpheus = new User("2", "morpheus", "matrix qa automation engineer");
-        String json = gson.toJson(morpheus);
+        User morpheus = new User("2", "morpheus", "matrix qa automation engineer"); // Создаем объект пользователя
+        String json = gson.toJson(morpheus); // Сериализируем
 
-        Response response = RequestSender.doRequest(RequestType.PUT, usersEndpoint + "/" + morpheus.getId(), json);
+        Response response = RequestSender.doRequest(RequestType.PUT, usersEndpoint + "/" + morpheus.getId(), json); // Отправляем PUT-запрос с телом
         logger.info(response.getBody().asPrettyString());
 
-        User returnedUser = response.jsonPath().getObject("", User.class);
+        User returnedUser = response.jsonPath().getObject("", User.class); // Десериализируем полученный ответ
 
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(morpheus).isEqualTo(returnedUser);
+        assertThat(response.statusCode()).isEqualTo(200); // Проверяем возвращенный статус-код
+        assertThat(morpheus).isEqualTo(returnedUser); // Убеждаемся, что возвращенный объект равен изначальному
     }
 }

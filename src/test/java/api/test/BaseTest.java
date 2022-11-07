@@ -5,13 +5,12 @@ import com.google.gson.GsonBuilder;
 import helper.DataManager;
 import org.junit.jupiter.api.BeforeAll;
 
-public class BaseTest {
+public class BaseTest { // Родительский класс для всех тестов
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
     protected static String usersEndpoint;
 
     @BeforeAll
     public static void setUp() {
-        usersEndpoint = DataManager.getUsersEndpoint();
-
+        usersEndpoint = DataManager.getUsersEndpoint(); // Получаем эндпоинт
     }
 }
